@@ -187,13 +187,11 @@ Step 2. The user now decides that adding the tag was a mistake, and decides to u
 
 </div>
 
-The following sequence diagram shows how the add tag operation works:
+The following sequence diagram shows how the undo operation works:
 
 ![AddTagSequenceDiagram](images/AddTagSequenceDiagram.png)
 
-<div markdown="span" class="alert alert-info">:information_source: **Note:** The lifeline for `AddTagCommand` should end at the destroy marker (X) but due to a limitation of PlantUML, the lifeline reaches the end of diagram.
-
-</div>
+<div markdown="span" class="alert alert-info">:information_source: **Note:** The lifeline for `UndoCommand` should end at the destroy marker (X) but due to a limitation of PlantUML, the lifeline reaches the end of diagram.
 
 #### Design considerations:
 
