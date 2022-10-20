@@ -219,25 +219,57 @@ The following activity diagram summarizes what happens when a user executes a ne
 
 <img src="images/CommitActivityDiagram.png" width="250" />
 
+### \[Proposed\] Add/Delete task feature
+
+#### Proposed Implementation
+
+The proposed add/delete task mechanism is facilitated by `TaskList`. It extends `AddressBook` with a task list, stored internally as a TaskList `tasks`.
+
+Every instance of AddTaskCommand is created with a Task instance. If the Task instance is null, an exception is thrown.
+
+Every instance of DeleteTaskCommand is created with an Index instance.
+
+Additionally, it implements the following operations:
+
+* `TaskList#addTask()` — Adds a task to the task list.
+* `TaskList#remove()` — Removes the specified task from the task list.
+* `TaskList#setTask()` — Replaces the task in the list with an edited task.
+
+These operations are exposed in the `Model` interface as `Model#addTask()`, `Model#deleteTask()` and `Model#setTask()` respectively.
+
+Given below is an example usage scenario and how the add/delete task mechanism behaves at each step.
+
+Step 1. The user launches the application for the first time. The `TaskList` will be initialized and contains no tasks.
+
+Step 2. The user executes `addT d/buy milk D/12-09-2022` command to add a task to the task list. The `addT` command calls `Model#addTask()`, causing the task to be added to the task list.
+
+<div markdown="span" class="alert alert-info">:information_source: **Note:** The addT command will fail its execution if its format is incorrect, and no task will be added to the task list. An error message will be displayed informing the user.
+
+Step 3. The user now decides that adding that task was a mistake, and decides to remove that task by executing `deleteT 1` to delete the first task in the task list. The `delete` command calls `Model#deleteTask()`, causing the first task in the task list to be deleted.
+
+<div markdown="span" class="alert alert-info">:information_source: **Note:** The deleteT command will fail its execution if the index provided is invalid, and no task will be removed from the task list. An error message will be displayed informing the user.
+
+</div>
+
+The following sequence diagram shows how the addT operation works:
+
+![AddTaskSequenceDiagram](images/AddTaskSequenceDiagram.png)
+
+<div markdown="span" class="alert alert-info">:information_source: **Note:** The lifeline for `AddTaskCommand` should end at the destroy marker (X) but due to a limitation of PlantUML, the lifeline reaches the end of diagram.
+
+</div>
+
 #### Design considerations:
 
-**Aspect: How undo & redo executes:**
+**Aspect: How addT & deleteT executes:**
 
-* **Alternative 1 (current choice):** Saves the entire address book.
+* **Alternative 1 (current choice):** Implement a TaskList class to handle the task list.
   * Pros: Easy to implement.
-  * Cons: May have performance issues in terms of memory usage.
+  * Cons: The code becomes longer as a new class must be implemented.
 
-* **Alternative 2:** Individual command knows how to undo/redo by
-  itself.
-  * Pros: Will use less memory (e.g. for `delete`, just save the person being deleted).
-  * Cons: We must ensure that the implementation of each individual command are correct.
-
-_{more aspects and alternatives to be added}_
-
-### \[Proposed\] Data archiving
-
-_{Explain here how the data archiving feature will be implemented}_
-
+* **Alternative 2:** Use the existing AddressBook class to store the Tasks.
+    * Pros: Does not require implementation of a new class.
+    * Cons: Increases complexity and length of code in AddressBook.
 
 --------------------------------------------------------------------------------------------------------------------
 
@@ -348,7 +380,7 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 1.  User requests to list persons
 2.  YellowBook shows a list of persons
 3.  User requests to delete a specific person in the list
-4.  AddressBook deletes the person
+4.  YellowBook deletes the person
 
     Use case ends.
 

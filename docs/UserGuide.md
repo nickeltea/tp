@@ -183,15 +183,22 @@ Example:
 
 * `addT d/buy milk D/12-09-2022` will add the task "buy milk" with deadline 12 September 2022.
 
-### Removing Tasks: `deleteT`
+### Deleting a task: `deleteT`
 
-Removes the specified task from the task list. Throws an exception if task does not exist.
+Removes the specified task from the task list. 
+Throws an exception if the specified task does not exist.
 
 Format: `deleteT INDEX`
+
+* Index of a task is its index number on the task list.
+
+* INDEX must be a positive integer more than 0.
 
 Example:
 
 * `deleteT 12` will delete the 12th task in the task list.
+
+* `findT book` followed by `deleteT 1` deletes the first result of the `findT` command.
 
 ### Marking task as done: `markT`
 
@@ -268,6 +275,14 @@ Format: `filterT KEYWORD [MORE_KEYWORDS]`
 Example:
 
 * `filterT cs2103t` will return tasks with label `CS2103T Software Engineering`.
+
+### List tasks due before specified date: `reminder`
+Lists tasks with deadlines before and on the specified date.
+Both marked and unmarked tasks will be listed.
+Throws an exception if the deadline of the task is empty.
+Throws an exception if the deadline of the task is not in dd-mm-yyyy format.
+
+Format: `reminder DEADLINE`
 
 ## Section 3: Labels
 ### Listing all labels: `listL`
